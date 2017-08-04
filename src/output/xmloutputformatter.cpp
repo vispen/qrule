@@ -4,10 +4,33 @@
 // See the file LICENSE from this package for details.
 //
 // SPDX-License-Identifier: GPL-3.0
+
 #include "output/xmloutputformatter.h"
+#include <QMap>
 
 QString XMLOutputFormatter::format(){
     QString output = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+
+    QMap<QString, int> sevMap;
+    foreach (QRuleOutput* ko, klist){
+        const QString key = ko->severity;
+        int nr;
+        if (sevMap.contains(key)) {
+            nr = sevMap.value(key);
+        } else {
+            nr = 0;
+        }
+        sevMap.insert(key, nr + 1);
+    }
+
+    output += "<testsuites errors=\"";
+    output += QString::number(sevMap.value("Critical"));
+    output += "\" warnings=\"";
+    output += QString::number(sevMap.value("Warning"));
+    output += "\" tests=\"";
+    output += QString::number(0);
+    output += "\">\n";
+
     foreach (QRuleOutput* ko, klist){
         QString occurrances = QString();
         foreach (CodeOccurrance occurrance, ko->getOccurrances()) {
@@ -30,5 +53,5 @@ QString XMLOutputFormatter::format(){
         output.append(qruleStartTag.append(occurrances).append(explanationTag).append(qruleEndTag));
     }
     output.chop(1);
-    return output;
+    return output.append("</testsuites>");
 }
