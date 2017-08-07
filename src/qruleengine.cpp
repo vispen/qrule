@@ -5,8 +5,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0
 #include "qruleengine.h"
-
-
+#include <QDir>
 
 /*!
  * \brief QRuleEngine::QRuleEngine Constructs a QRuleEngine by parsing a given QRule file.
@@ -194,7 +193,9 @@ void QRuleEngine::verifyQMLFile(const QFileInfo &qmlFilename, const bool renderD
 
     // Create dot files of the wrapped AST
     if(renderDot) {
-        QString dotFile = qmlFilename.absoluteFilePath();
+        QDir d;
+        d.mkdir(QString("output"));
+        QString dotFile = d.absolutePath() + "/output/" + qmlFilename.fileName();
         if(isJavaScript){
             dotFile.chop(2);
         } else {
