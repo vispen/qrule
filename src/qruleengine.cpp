@@ -206,7 +206,6 @@ void QRuleEngine::verifyQMLFile(const QFileInfo &qmlFilename, const bool renderD
         if(fl2.open(QFile::WriteOnly | QFile::Truncate)){
             QTextStream out(&fl2);
             out << "digraph {" << wrappedSuperAST->getOutput() << " }";
-
         }
     }
 }
