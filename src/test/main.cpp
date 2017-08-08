@@ -10,6 +10,7 @@
 #include <QDateTime>
 #include <QFile>
 #include <QXmlStreamReader>
+#include <QDir>
 
 QString findXmlAttribute(QXmlStreamReader &xml, QString name);
 
@@ -21,7 +22,7 @@ bool compareXMLFiles(QFile &file1, QFile &file2) {
     QFile *filePointer1 = std::addressof(file1);
     QFile *filePointer2 = std::addressof(file2);
 
-    if (!filePointer1->open(QIODevice::ReadOnly) && !filePointer2->open(QIODevice::ReadOnly))
+    if (!filePointer1->open(QIODevice::ReadOnly) || !filePointer2->open(QIODevice::ReadOnly))
     {
         qDebug() << "Could not open xml file:" << filePointer1->fileName() << ", " << filePointer2->fileName();
         return false;
@@ -32,8 +33,7 @@ bool compareXMLFiles(QFile &file1, QFile &file2) {
     /* We'll parse the XML until we reach end of it.*/
     while (!xmlReader1.atEnd() && !xmlReader1.hasError() && !xmlReader2.atEnd() && !xmlReader2.hasError())
     {
-
-        /* Read next element.*/
+         /* Read next element.*/
         QXmlStreamReader::TokenType token1 = xmlReader1.readNext();
         QXmlStreamReader::TokenType token2 = xmlReader2.readNext();
         if (token1 == QXmlStreamReader::StartDocument || token2 == QXmlStreamReader::StartDocument){
@@ -63,7 +63,7 @@ bool compareXMLFiles(QFile &file1, QFile &file2) {
 
             if (xmlReader1.name() == "occurrance")
             {
-                if (!QString::compare(findXmlAttribute(xmlReader1, "row"), findXmlAttribute(xmlReader2, "row")) == 0 &&
+                if (!QString::compare(findXmlAttribute(xmlReader1, "row"), findXmlAttribute(xmlReader2, "row")) == 0 ||
                     !QString::compare(findXmlAttribute(xmlReader1, "col"), findXmlAttribute(xmlReader2, "col")) == 0)
                 {
                     qDebug() << "xml row, col missmatch in files: " << filePointer1->fileName() << ", " << filePointer2->fileName()
@@ -77,8 +77,6 @@ bool compareXMLFiles(QFile &file1, QFile &file2) {
         {
             qDebug() << "Error parsing xml:" << (xmlReader1.hasError() ? xmlReader1.errorString(): xmlReader2.errorString());
         }
-        xmlReader1.clear();
-        xmlReader2.clear();
     }
 }
 
@@ -120,6 +118,19 @@ int main(int argv, char *argc[]) {
             qDebug() << "executing program failed with exit code" << process.exitCode();
         else
             qDebug() << QString("### Start validating xml files ####");
+
+
+        QDir d;
+        QFile file(d.absolutePath() + "/output/output.xml");
+        QFile file_valid(d.absolutePath() + "/resources/validXmlOutput/basic_2.xml");
+        if (compareXMLFiles(file, file_valid))
+            qDebug() << "Wohooo it was a success !!   :o)";
+        else
+            qDebug() << "sadly the xml did not match up :o( ";
+
+        qDebug() << "############################################";
+        qDebug() << "                TEST session completed";
+        qDebug() << "############################################";
 
 }
 

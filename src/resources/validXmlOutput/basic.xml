@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites errors="2" warnings="0" tests="0">
+<qrule tag="LowerCaseLetterStartVarName" severity="Critical" astscope="Imported" rulecause="Policy">
+<occurrance row="10" col="20" filename="/home/vispen/MyProjects/fork/vispen/qrule/build/resources/fil.qml">
+Z = {asd: 123}
+</occurrance>
+<explanation>
+It is awfully important to have all JavaScript      variable names start with a lowercase letter
+</explanation></qrule>
+<qrule tag="NoUnreferencedId" severity="Critical" astscope="File" rulecause="Policy">
+<occurrance row="5" col="9" filename="/home/vispen/MyProjects/fork/vispen/qrule/build/resources/fil.qml">
+ident1
+</occurrance>
+<occurrance row="14" col="9" filename="/home/vispen/MyProjects/fork/vispen/qrule/build/resources/fil.qml">
+window1
+</occurrance>
+<explanation>
+All defined ids should be used at some point
+</explanation></qrule></testsuites>
