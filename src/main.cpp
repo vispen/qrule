@@ -1,4 +1,4 @@
-// Copyright (C) 2016 Pelagicore
+// Copyright (C) 2016 - 2017 Pelagicore
 //
 // You may use this file under the terms of the GPLv3 license.
 // See the file LICENSE from this package for details.
@@ -22,7 +22,9 @@ void printOutput(const QList<QRuleOutput*> &ruleViolations, QString fileName) {
     OutputFormatter* xof = new XMLOutputFormatter(ruleViolations);
     qDebug() << xof->format().toStdString().c_str();
 
-    QFile fl(fileName);
+    QDir d;
+    d.mkdir(QString("output"));
+    QFile fl(d.absolutePath() + "/output/" + fileName);
     fl.open(QIODevice::WriteOnly);
     fl.write(xof->format().toStdString().c_str());
     fl.close();
@@ -49,10 +51,10 @@ int main(int argv, char *argc[]) {
     QCommandLineOption setDot(QStringList() << "d" << "dotty", QLatin1String("Create dot file for each QML file"));
     commandLine.addOption(setDot);
 
-    QCommandLineOption setOutput(QStringList() << "o" << "outPutFile", QLatin1String("Change name of the output file"),"nameFile", "output.xml");
+    QCommandLineOption setOutput(QStringList() << "o" << "outPutFile", QLatin1String("Change name of the output file"), "nameFile", "output.xml");
     commandLine.addOption(setOutput);
 
-    QCommandLineOption setPath(QStringList() << "I" << "ImportPath", QLatin1String("Change project path"),"path","");
+    QCommandLineOption setPath(QStringList() << "I" << "ImportPath", QLatin1String("Change project path"), "path", "");
     commandLine.addOption(setPath);
 
     commandLine.addPositionalArgument(QLatin1String("qrule"), QLatin1String("QRule rules file"));

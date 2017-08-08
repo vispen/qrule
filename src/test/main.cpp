@@ -1,4 +1,4 @@
-// Copyright (C) 2016 Pelagicore
+// Copyright (C) 2017 Pelagicore
 //
 // You may use this file under the terms of the GPLv3 license.
 // See the file LICENSE from this package for details.
@@ -119,7 +119,7 @@ int main(int argv, char *argc[]) {
         if(!process.waitForFinished()) // beware the timeout default parameter
             qDebug() << "executing program failed with exit code" << process.exitCode();
         else
-            qDebug() << QString("###Tests done####");
+            qDebug() << QString("### Start validating xml files ####");
 
 }
 

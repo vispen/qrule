@@ -1,4 +1,4 @@
-// Copyright (C) 2016 Pelagicore
+// Copyright (C) 2016 - 2017 Pelagicore
 //
 // You may use this file under the terms of the GPLv3 license.
 // See the file LICENSE from this package for details.
@@ -194,8 +194,8 @@ void QRuleEngine::verifyQMLFile(const QFileInfo &qmlFilename, const bool renderD
     // Create dot files of the wrapped AST
     if(renderDot) {
         QDir d;
-        d.mkdir(QString("output"));
-        QString dotFile = d.absolutePath() + "/output/" + qmlFilename.fileName();
+        d.mkdir(QString("dotty"));
+        QString dotFile = d.absolutePath() + "/dotty/" + qmlFilename.fileName();
         if(isJavaScript){
             dotFile.chop(2);
         } else {
