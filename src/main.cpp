@@ -23,7 +23,8 @@ void printOutput(const QList<QRuleOutput*> &ruleViolations, QString fileName) {
     qDebug() << xof->format().toStdString().c_str();
 
     QDir d;
-    d.mkdir(QString("output"));
+    if (!d.mkdir(QString("output")))
+        qDebug() << "Error creating directory ";
     QFile fl(d.absolutePath() + "/output/" + fileName);
     fl.open(QIODevice::WriteOnly);
     fl.write(xof->format().toStdString().c_str());

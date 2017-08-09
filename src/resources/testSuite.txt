@@ -1,0 +1,9 @@
+#
+# TestSuite for QRule.
+# 
+# Use the following format for each testcase.
+# explanation;rules_to_test.kr;fil_to_test.qml;valid_Output_Xml_File.xml
+#
+basic.kr;basic.qml;basic.xml
+basic_test_for_suit;basic.kr;basic.qml;basic.xml 
+basic_test_for_suit;basic.kr;basic.qml;basic_2.xml
