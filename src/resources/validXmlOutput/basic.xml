@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites errors="2" warnings="0" tests="0">
 <qrule tag="LowerCaseLetterStartVarName" severity="Critical" astscope="Imported" rulecause="Policy">
-<occurrance row="10" col="20" filename="/home/vispen/MyProjects/fork/vispen/qrule/build/resources/fil.qml">
+<occurrance row="10" col="21" filename="/home/vispen/MyProjects/fork/vispen/qrule/build/resources/fil.qml">
 Z = {asd: 123}
 </occurrance>
 <explanation>

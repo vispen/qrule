@@ -1,9 +1,10 @@
-#
 # TestSuite for QRule.
-# 
+#
+# Each line in testSuite.txt represents a test case. Each line is seperated into 5 sections divided by ";"
+#
 # Use the following format for each testcase.
-# explanation;rules_to_test.kr;fil_to_test.qml;valid_Output_Xml_File.xml
+# explanation_of_rule; output_file_name.xml(can be empty, default name output.xml); rules_to_test.kr; fil_to_test.qml; valid_Output_Xml_File_to_test_against.xml
 #
 basic.kr;basic.qml;basic.xml
-basic_test_for_suit;basic.kr;basic.qml;basic.xml 
-basic_test_for_suit;basic.kr;basic.qml;basic_2.xml
+basic_test_for_suit;;basic.kr;basic.qml;basic.xml
+basic_test_for_suit2; basic_test_for_suit2.xml;basic.kr;basic.qml;basic_2.xml

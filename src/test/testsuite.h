@@ -25,7 +25,7 @@ public:
 private:
     QString findXmlAttribute(QXmlStreamReader &xml, QString name);
     bool compareXMLFiles(QFile &file1, QFile &file2);
-    void runQRuleEngine(QString ruleFile, QString qmlFile);
+    void runQRuleEngine(QString outPutFileName, QString ruleFile, QString qmlFile);
 
 };
 

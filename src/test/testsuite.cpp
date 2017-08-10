@@ -13,7 +13,7 @@ void TestSuite::runTestSuite()
     qDebug() << "                TEST suite started";
     qDebug() << "############################################";
 
-    float nrules = 0, errors = 0, good = 0, bad = 0;
+    float nrules = 0, errors = 0, good = 0, bad = 0, ntested = 0;
     QDir d;
     QString fileName("/resources/testSuite.txt");
     QFile fileTestSuite(d.absolutePath() + fileName);
@@ -23,8 +23,8 @@ void TestSuite::runTestSuite()
         return;
     }
     QTextStream in(&fileTestSuite);
-    // count number of rules
 
+    // count number of rules
     while (!in.atEnd()) {
         QString line = in.readLine().trimmed();
         // If the line start with # it is a comment and should be ignored.
@@ -45,28 +45,29 @@ void TestSuite::runTestSuite()
         }else
         {
             QStringList list = line.split(";", QString::KeepEmptyParts);
-            if(list.length() != 4)
+            if(list.length() != 5)
             {
                 errors++;
-                qDebug() <<"[" << qFloor(errors+good+bad)/nrules * 100 << "%]" << "wrong number of arguments on line" << row << "in " << fileName;
+                ntested++;
+                qDebug() <<"[" << qFloor((errors+good+bad)/nrules * 100) << "%]" << "Error - wrong number of arguments on line" << row << "in " << fileName;
             }
             else
             {
-                // run QRuleEngine
-                runQRuleEngine(list.at(1).trimmed(), list.at(2).trimmed());
+                runQRuleEngine(list.at(1).trimmed(), list.at(2).trimmed(), list.at(3).trimmed());
                 // validate result from QRuleEngine
-
-                QFile file(d.absolutePath() + "/output/output.xml");
-                QFile file_valid(d.absolutePath() + "/resources/validXmlOutput/" + list.at(3).trimmed());
-                if (compareXMLFiles(file, file_valid))
-                {
-                    good++;
-                    qDebug() <<"[" << qFloor(errors+good+bad)/nrules * 100 << "%]" << list.at(0).trimmed() << " - ok";
-                }
+                ntested++;
+                qDebug() <<"[" << qFloor((ntested)/nrules * 100) << "%]" << list.at(0).trimmed();
+                QString outPutFileName;
+                if(list.at(1).trimmed().isEmpty())
+                    outPutFileName = "/output/output.xml";
                 else
-                {
+                    outPutFileName =  "/output/" + list.at(1).trimmed();
+                QFile file(d.absolutePath() + outPutFileName);
+                QFile file_valid(d.absolutePath() + "/resources/validXmlOutput/" + list.at(4).trimmed());
+                if (compareXMLFiles(file, file_valid)){
+                    good++;
+                } else{
                     bad++;
-                    qDebug() <<"[" << qFloor(errors+good+bad)/nrules * 100 << "%]" << list.at(0).trimmed() << " - failed";
                 }
             }
         }
@@ -83,12 +84,19 @@ void TestSuite::runTestSuite()
 /* Run QruleEngine with ruleFile and qmlFile
  *
  */
-void TestSuite::runQRuleEngine(QString ruleFile, QString qmlFile)
+void TestSuite::runQRuleEngine(QString outPutFileName, QString ruleFile, QString qmlFile)
 {
     QProcess process;
-    process.start("./QRuleEngine",
-                  QStringList() << "resources/qmlTestFiles/" + ruleFile << "resources/qmlTestFiles/" + qmlFile,
-                  QIODevice::ReadWrite);
+    if(outPutFileName.isEmpty())
+    {
+        process.start("./QRuleEngine",
+                      QStringList() << "resources/qmlTestFiles/" + ruleFile << "resources/qmlTestFiles/" + qmlFile,
+                      QIODevice::ReadWrite);
+    }else{
+        process.start("./QRuleEngine",
+                      QStringList() << "-o" + outPutFileName << "resources/qmlTestFiles/" + ruleFile << "resources/qmlTestFiles/" + qmlFile,
+                      QIODevice::ReadWrite);
+    }
     if(!process.waitForFinished()) // beware the timeout default parameter
         qDebug() << "executing program failed with exit code" << process.exitCode();
 }
